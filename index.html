@@ -12,10 +12,15 @@
         try {
           var path = window.location.pathname;
           var isFile = /\.[a-zA-Z0-9]{1,5}$/.test(path); // 有扩展名的是真实文件（如 .js/.png）
-          if (!isFile && path && path !== '/' && path !== '/index.html') {
-            var target = window.location.origin + '/#/' + path.replace(/^\//, '');
-            window.location.replace(target);
-          }
+          if (isFile) return;
+          if (window.location.hash) return; // 已是 hash 路由，正常加载
+          var segs = path.split('/').filter(Boolean);
+          if (segs.length === 0) return; // 根路径正常
+          // 站点子路径前缀：GitHub Pages 为 /{repo}，取第一段
+          var siteBase = '/' + segs[0];
+          var rest = segs.slice(1).join('/');
+          var target = window.location.origin + siteBase + '/#/' + rest;
+          window.location.replace(target);
         } catch (e) { /* 忽略异常，不影响正常加载 */ }
       })();
     </script>

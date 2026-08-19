@@ -2,20 +2,23 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>正在跳转...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宏瑞BOSS - 正在跳转...</title>
   <script>
-    // 静态托管无 SPA fallback：任何不带 # 的路径（如 /store/sales）会命中 404 页。
-    // 自动转为 HashRouter 格式（#/store/sales）并重定向到应用根路径。
+    // 静态托管无 SPA fallback：不带 # 的路径（如 /store/sales）会命中 404 页。
+    // 自动转为 HashRouter 格式（#/store/sales）并重定向到应用。
     (function () {
       try {
         var path = window.location.pathname;
-        var isFile = /\.[a-zA-Z0-9]{1,5}$/.test(path); // 有扩展名的真实文件不处理
-        if (!isFile && path && path !== '/' && path !== '/index.html' && path !== '/404.html') {
-          var target = window.location.origin + '/#/' + path.replace(/^\//, '');
-          window.location.replace(target);
-        } else {
-          window.location.replace(window.location.origin + '/');
-        }
+        var isFile = /\.[a-zA-Z0-9]{1,5}$/.test(path);
+        if (isFile) return; // 有扩展名的是真实文件，不处理
+        if (window.location.hash) return; // 已是 hash 路由，正常
+        // 站点子路径前缀：GitHub Pages 为 /{repo}，取第一段
+        var segs = path.split('/').filter(Boolean);
+        var siteBase = segs.length > 0 ? '/' + segs[0] : '';
+        var rest = segs.slice(1).join('/');
+        var target = window.location.origin + siteBase + '/#/' + rest;
+        window.location.replace(target);
       } catch (e) {
         window.location.replace(window.location.origin + '/');
       }
@@ -25,7 +28,7 @@
 <body>
   <div style="font-family: sans-serif; text-align: center; padding: 60px 20px; color: #64748b;">
     <h2>正在加载系统...</h2>
-    <p>如果长时间未跳转，请点击 <a href="/">这里</a></p>
+    <p>如果长时间未跳转，请点击 <a href="./#/">这里</a></p>
   </div>
 </body>
 </html>
