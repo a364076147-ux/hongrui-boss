@@ -5,8 +5,22 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>宏瑞BOSS - 门店管理系统</title>
-    <script type="module" crossorigin src="./assets/index-DIABkKVH.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BQdwImNN.css">
+    <script>
+      // 静态托管无 SPA fallback：不带 # 的路径（如 /store/sales）会 404。
+      // 自动重定向为 HashRouter 格式（#/store/sales），保证任意路径都能打开。
+      (function () {
+        try {
+          var path = window.location.pathname;
+          var isFile = /\.[a-zA-Z0-9]{1,5}$/.test(path); // 有扩展名的是真实文件（如 .js/.png）
+          if (!isFile && path && path !== '/' && path !== '/index.html') {
+            var target = window.location.origin + '/#/' + path.replace(/^\//, '');
+            window.location.replace(target);
+          }
+        } catch (e) { /* 忽略异常，不影响正常加载 */ }
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CCOr03Ml.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BCL_Efp6.css">
   </head>
   <body>
     <div id="root"></div>
